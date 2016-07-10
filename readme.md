@@ -1,6 +1,6 @@
 # ycall
 
-Simplifies interop between [co](https://www.npmjs.com/package/co) (promise / generator-based) and callbacks (both node-style nodebacks where the first parameter is an error, and regular callbacks).
+Simplifies interop between [co](https://www.npmjs.com/package/co) (promise / generator-based) async functions, and async callback-based functions (both node-style nodebacks where the first parameter is an error, and regular callbacks).
 
 ## Features
 
@@ -10,7 +10,7 @@ Simplifies interop between [co](https://www.npmjs.com/package/co) (promise / gen
 
 ## Example: Turning a generator into a callback/promise-based function with cbify
 
-```
+```javascript
 var {cbify} = require('ycall');
 
 var cbify_example = cbify(function*() {
@@ -24,7 +24,7 @@ cbify_example().then(function(x) { console.log(x) }); // 5
 
 ## Example: Using callback-based functions in generators with yify
 
-```
+```javascript
 var {cbify, ycall} = require('ycall');
 
 var yify_example_with_arguments = cbify(function*(a, b) {
@@ -38,7 +38,7 @@ yify_example_with_arguments(2, 7).then(function(x) { console.log(x) }); // 15
 
 ## Example: Using callback-based functions in generators with ycall
 
-```
+```javascript
 var {cbify, ycall} = require('ycall');
 
 var ycall_example_with_arguments = cbify(function*(a, b) {
@@ -60,7 +60,7 @@ npm install ycall
 
 For the purpose of these examples, we assume you have required the library as follows:
 
-```
+```javascript
 var {cbify, cbify_node, ycall, ycall_node, yify, yify_node} = require('ycall');
 ```
 
@@ -68,13 +68,13 @@ var {cbify, cbify_node, ycall, ycall_node, yify, yify_node} = require('ycall');
 
 For the purpose of these examples, we assume you have required the library as follows:
 
-```
+```javascript
 var {cbify, cbify_node, ycall, ycall_node, yify, yify_node} = require('ycall');
 ```
 
 Additionally, we will be using the following callback/nodeback-based functions in the examples:
 
-```
+```javascript
 function addone_async(x, callback) {
   setTimeout(function() {
     callback(x + 1);
@@ -82,7 +82,7 @@ function addone_async(x, callback) {
 }
 ```
 
-```
+```javascript
 function addone_async_node(x, nodeback) {
   setTimeout(function() {
     nodeback(null, x + 1);
@@ -94,7 +94,7 @@ function addone_async_node(x, nodeback) {
 
 `cbify` creates a callback-style function from a generator
 
-```
+```javascript
 var cbify_example = cbify(function*() {
   var result = yield Promise.resolve(5); // 5
   return result;
@@ -105,7 +105,7 @@ cbify_example(function(x) { console.log(x) }); // 5
 
 If the last argument is not a function, a promise will be returned instead:
 
-```
+```javascript
 cbify_example().then(function(x) { console.log(x) }); // 5
 ```
 
@@ -114,7 +114,7 @@ cbify_example().then(function(x) { console.log(x) }); // 5
 `cbify_node` creates a nodeback-style function from a generator
 
 
-```
+```javascript
 var cbify_node_example = cbify_node(function*() {
   var result = yield Promise.resolve(5); // 5
   return result;
@@ -125,7 +125,7 @@ cbify_node_example(function(err, x) { console.log(x) }); // 5
 
 If the last argument is not a function, a promise will be returned instead:
 
-```
+```javascript
 cbify_node_example().then(function(x) { console.log(x) });
 ```
 
@@ -133,7 +133,7 @@ cbify_node_example().then(function(x) { console.log(x) });
 
 `yify` transforms a callback-style function into a promise which can be yielded within a generator.
 
-```
+```javascript
 function add_async(x, y, callback) {
   setTimeout(function() {
     callback(x + y);
@@ -152,7 +152,7 @@ yify_example_with_arguments(2, 7, function(x) { console.log(x) }); // 15
 
 `yify_node` transforms a nodeback-style function into a promise which can be yielded within a generator.
 
-```
+```javascript
 function add_async_node(x, y, nodeback) {
   setTimeout(function() {
     nodeback(null, x + 1);
@@ -171,7 +171,7 @@ yify_node_example_with_arguments(2, 7, function(err, x) { console.log(x) }); // 
 
 `ycall` is a shorthand that calls `yify` on a callback-based function and calls it with the remaining parameters. So `ycall(func, x, y)` is equivalent to `yify(func)(x, y)`
 
-```
+```javascript
 function add_async(x, y, callback) {
   setTimeout(function() {
     callback(x + y);
@@ -190,7 +190,7 @@ ycall_example_with_arguments(2, 7, function(x) { console.log(x) }); // 15
 
 `ycall_node` is a shorthand that calls `yify_node` on a nodeback-based function and calls it with the remaining parameters. So `ycall_node(func, x, y)` is equivalent to `yify_node(func)(x, y)`
 
-```
+```javascript
 function add_async_node(x, y, nodeback) {
   setTimeout(function() {
     nodeback(null, x + 1);
@@ -204,6 +204,10 @@ var ycall_node_example_with_arguments = cbify_node(function*(a, b) {
 
 ycall_node_example_with_arguments(2, 7, function(err, x) { console.log(x) }); // 15
 ```
+
+## More Examples
+
+You will find more examples in [`example.js`](https://github.com/gkovacs/ycall/blob/master/example.js) (for interop with normal callback-based async functions) and [`example_node.js`](https://github.com/gkovacs/ycall/blob/master/example_node.js) (for interop with node-style nodeback-based async functions).
 
 ## Credits
 
