@@ -4,21 +4,21 @@ require! {
   unthenify
 }
 
-export yify = (f) ->
+export yfy = (f) ->
   denodeify f, (...res) ->
     if res.length == 1
       return [null, res[0]]
     else
       return [null, [...res]]
 
-export yify_node = (f) ->
+export yfy_node = (f) ->
   denodeify f, (err, ...res) ->
     if res.length == 1
       return [err, res[0]]
     else
       return [err, [...res]]
 
-export cbify = (f) ->
+export cfy = (f) ->
   wrapped = co.wrap(f)
   return (...args, callback) ->
     if typeof(callback) == 'function'
@@ -26,7 +26,7 @@ export cbify = (f) ->
     else
       return wrapped(...args, callback)
 
-export cbify_node = (f) ->
+export cfy_node = (f) ->
   wrapped = co.wrap(f)
   wrapped_cb = unthenify(wrapped)
   return (...args, callback) ->
@@ -37,7 +37,7 @@ export cbify_node = (f) ->
   return unthenify(co.wrap(f))
 
 export ycall = (f, ...args) ->
-  yify(f)(...args)
+  yfy(f)(...args)
 
 export ycall_node = (f, ...args) ->
-  yify_node(f)(...args)
+  yfy_node(f)(...args)
