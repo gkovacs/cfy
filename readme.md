@@ -4,51 +4,9 @@ Simplifies interop between [co](https://www.npmjs.com/package/co) (promise / gen
 
 ## Features
 
-* Can turn generators into a callback function (using `cbify`) or a node-style nodeback-based function (using `cbify_node`). If the resulting function is not passed a callback, an ES6 Promise is returned.
-* Can `yield` callback-based functions in generators (using `yify` or `ycall`), as well as node-style nodeback-based functions (using `yify_node` or `ycall_node`).
+* Write callback-based async functions using generators (using `cbify`). Can also write node-style ("nodeback") async functions (using `cbify_node`). If the resulting function is not passed a callback, an ES6 Promise is returned.
+* Can `yield` callback-based functions in generators (using `yify`), as well as node-style nodeback-based functions (using `yify_node`).
 * All features of generators wrapped with [co](https://www.npmjs.com/package/co) (such as yielding Promises) can be used generators wrapped with `cbify` and `cbify_node`.
-
-## Example: Turning a generator into a callback/promise-based function with cbify
-
-```javascript
-var {cbify} = require('ycall');
-
-var cbify_example = cbify(function*() {
-  var result = yield Promise.resolve(5); // 5
-  return result;
-});
-
-cbify_example(function(x) { console.log(x) }); // 5
-cbify_example().then(function(x) { console.log(x) }); // 5
-```
-
-## Example: Using callback-based functions in generators with yify
-
-```javascript
-var {cbify, ycall} = require('ycall');
-
-var yify_example_with_arguments = cbify(function*(a, b) {
-  var result = yield yify(add_async)(5, 1); // 6
-  return result + a + b;
-});
-
-yify_example_with_arguments(2, 7, function(x) { console.log(x) }); // 15
-yify_example_with_arguments(2, 7).then(function(x) { console.log(x) }); // 15
-```
-
-## Example: Using callback-based functions in generators with ycall
-
-```javascript
-var {cbify, ycall} = require('ycall');
-
-var ycall_example_with_arguments = cbify(function*(a, b) {
-  var result = yield ycall(add_async, 5, 1); // 6
-  return result + a + b;
-});
-
-ycall_example_with_arguments(2, 7, function(x) { console.log(x) }); // 15
-ycall_example_with_arguments(2, 7).then(function(x) { console.log(x) }); // 15
-```
 
 ## Install
 
@@ -64,31 +22,37 @@ For the purpose of these examples, we assume you have required the library as fo
 var {cbify, cbify_node, ycall, ycall_node, yify, yify_node} = require('ycall');
 ```
 
+## Examples
+
+### Turning a generator into a callback/promise-based async function
+
+```javascript
+var {cbify} = require('ycall');
+
+var cbify_example = cbify(function*() {
+  var result = yield Promise.resolve(5); // 5
+  return result;
+});
+
+cbify_example(function(x) { console.log(x) }); // 5
+cbify_example().then(function(x) { console.log(x) }); // 5
+```
+
+### Using callback-based async functions in generators
+
+```javascript
+var {cbify, yify} = require('ycall');
+
+var yify_example_with_arguments = cbify(function*(a, b) {
+  var result = yield yify(add_async)(5, 1); // 6
+  return result + a + b;
+});
+
+yify_example_with_arguments(2, 7, function(x) { console.log(x) }); // 15
+yify_example_with_arguments(2, 7).then(function(x) { console.log(x) }); // 15
+```
+
 ## API
-
-For the purpose of these examples, we assume you have required the library as follows:
-
-```javascript
-var {cbify, cbify_node, ycall, ycall_node, yify, yify_node} = require('ycall');
-```
-
-Additionally, we will be using the following callback/nodeback-based functions in the examples:
-
-```javascript
-function addone_async(x, callback) {
-  setTimeout(function() {
-    callback(x + 1);
-  }, 1000);
-}
-```
-
-```javascript
-function addone_async_node(x, nodeback) {
-  setTimeout(function() {
-    nodeback(null, x + 1);
-  }, 1000);
-}
-```
 
 ### cbify
 
@@ -207,7 +171,7 @@ ycall_node_example_with_arguments(2, 7, function(err, x) { console.log(x) }); //
 
 ## More Examples
 
-You will find more examples in [`example.js`](https://github.com/gkovacs/ycall/blob/master/example.js) (for interop with normal callback-based async functions) and [`example_node.js`](https://github.com/gkovacs/ycall/blob/master/example_node.js) (for interop with node-style nodeback-based async functions).
+You will find more examples in [`example.js`](https://github.com/gkovacs/ycall/blob/master/example.js) (for interop with normal callback-based async functions) and [`example_node.js`](https://github.com/gkovacs/ycall/blob/master/example_node.js) (for interop with node-style nodeback-based async functions). The unit tests include examples of usage from Livescript.
 
 ## Credits
 

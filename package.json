@@ -1,6 +1,6 @@
 {
   "name": "ycall",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Use generators and yield to write regular callback-based functions",
   "main": "index.js",
   "keywords": [
@@ -13,7 +13,7 @@
     "nodeback"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --compilers ls:livescript"
   },
   "repository": {
     "type": "git",
@@ -29,5 +29,10 @@
     "co": "^4.6.0",
     "denodeify": "^1.2.1",
     "unthenify": "^1.0.2"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "livescript": "^1.5.0",
+    "mocha": "^2.5.3"
   }
 }
