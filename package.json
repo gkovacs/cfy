@@ -1,6 +1,6 @@
 {
-  "name": "ycall",
-  "version": "1.0.5",
+  "name": "cfy",
+  "version": "1.0.6",
   "description": "Use generators and yield to write regular callback-based functions",
   "main": "index.js",
   "keywords": [
