@@ -22,19 +22,18 @@ export cfy = (f) ->
   wrapped = co.wrap(f)
   return (...args, callback) ->
     if typeof(callback) == 'function'
-      return wrapped(...args).then(callback, (err) -> console.log(err))
+      return wrapped.bind(this)(...args).then(callback, (err) -> console.log(err))
     else
-      return wrapped(...args, callback)
+      return wrapped.bind(this)(...args, callback)
 
 export cfy_node = (f) ->
   wrapped = co.wrap(f)
   wrapped_cb = unthenify(wrapped)
   return (...args, callback) ->
     if typeof(callback) == 'function'
-      return wrapped_cb(...args, callback)
+      return wrapped_cb.bind(this)(...args, callback)
     else
-      return wrapped(...args, callback)
-  return unthenify(co.wrap(f))
+      return wrapped.bind(this)(...args, callback)
 
 export ycall = (f, ...args) ->
   yfy(f)(...args)

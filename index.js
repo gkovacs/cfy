@@ -45,11 +45,11 @@
       }
       args = res$; callback = arguments[i$];
       if (typeof callback === 'function') {
-        return wrapped.apply(null, args).then(callback, function(err){
+        return wrapped.bind(this).apply(null, args).then(callback, function(err){
           return console.log(err);
         });
       } else {
-        return wrapped.apply(null, slice$.call(args).concat([callback]));
+        return wrapped.bind(this).apply(null, slice$.call(args).concat([callback]));
       }
     };
   };
@@ -65,12 +65,11 @@
       }
       args = res$; callback = arguments[i$];
       if (typeof callback === 'function') {
-        return wrapped_cb.apply(null, slice$.call(args).concat([callback]));
+        return wrapped_cb.bind(this).apply(null, slice$.call(args).concat([callback]));
       } else {
-        return wrapped.apply(null, slice$.call(args).concat([callback]));
+        return wrapped.bind(this).apply(null, slice$.call(args).concat([callback]));
       }
     };
-    return unthenify(co.wrap(f));
   };
   out$.ycall = ycall = function(f){
     var args, res$, i$, to$;

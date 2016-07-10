@@ -9,7 +9,10 @@
   sleep_node
 } = require('../index')
 
-require! chai
+require! {
+  co
+  chai
+}
 
 chai.should()
 
@@ -162,4 +165,35 @@ describe 'all tests', ->
       return 5
     result <- f()
     result.should.equal(5)
+    done()
+
+  specify 'retain this baseline', (done) ->
+    this.x = 3
+    f = (callback) ->
+      callback(this.x)
+    res1 <~ f()
+    res2 <~ f.bind(this)()
+    3.should.not.equal(res1)
+    3.should.equal(res2)
+    done()
+
+  specify 'retain this with cfy', (done) ->
+    this.x = 3
+    f = cfy ->*
+      return this.x
+    res1 <~ f()
+    res2 <~ f.bind(this)()
+    3.should.not.equal(res1)
+    3.should.equal(res2)
+    done()
+
+
+  specify 'retain this with cfy_node', (done) ->
+    this.x = 3
+    f = cfy_node ->*
+      return this.x
+    err1,res1 <~ f()
+    err2,res2 <~ f.bind(this)()
+    3.should.not.equal(res1)
+    3.should.equal(res2)
     done()
