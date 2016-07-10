@@ -6,7 +6,7 @@ Simplifies interop between [co](https://www.npmjs.com/package/co) (promise / gen
 
 * Write callback-based async functions using generators (using `cfy`). Can also write node-style ("nodeback") async functions (using `cfy_node`). If the resulting function is not passed a callback, an ES6 Promise is returned.
 * Can `yield` callback-based functions in generators (using `yfy`), as well as node-style nodeback-based functions (using `yfy_node`).
-* All features of generators wrapped with [co](https://www.npmjs.com/package/co) (such as yielding Promises) can be used generators wrapped with `cfy` and `cfy_node`.
+* All features of generators wrapped with [co](https://www.npmjs.com/package/co) (such as yielding Promises) can be used in generators wrapped with `cfy` and `cfy_node`.
 
 ## Install
 
