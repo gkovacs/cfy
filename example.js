@@ -66,3 +66,17 @@ var yify_example_multiarg_callback = cbify(function*() {
 });
 
 yify_example_multiarg_callback(function(x) { console.log(x) }); // [6, 'foo', 'bar']
+
+var sleep = cbify(function*(time) {
+  function sleep_base(msecs, callback) {
+    setTimeout(callback, msecs);
+  }
+  yield yify(sleep_base)(time);
+});
+
+var sleep_example = cbify(function*() {
+  yield sleep(3000); // sleeps for 3 seconds
+  return 7;
+});
+
+sleep_example(function(x) { console.log(x) }); // 7

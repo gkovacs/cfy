@@ -5,6 +5,8 @@
   yify_node
   cbify_node
   ycall_node
+  sleep
+  sleep_node
 } = require('../index')
 
 require! chai
@@ -136,4 +138,28 @@ describe 'all tests', ->
     res1.should.equal((2 + 4) * 3)
     res2 <- add_then_multiply_then_divide(2, 4, 3, 9)
     res2.should.equal((2 + 4) * 3 / 9)
+    done()
+
+  specify 'yield setTimeout', (done) ->
+    sleep = cbify (time) ->*
+      sleep_base = (ntime, callback) ->
+        setTimeout(callback, ntime)
+      yield yify(sleep_base)(time)
+    f = cbify ->*
+      x = yield sleep(0)
+      return 5
+    result <- f()
+    result.should.equal(5)
+    done()
+
+  specify 'yify redundant yify test', (done) ->
+    sleep = cbify (time) ->*
+      sleep_base = (ntime, callback) ->
+        setTimeout(callback, ntime)
+      yield yify(sleep_base)(time)
+    f = cbify ->*
+      x = yield yify(sleep)(0)
+      return 5
+    result <- f()
+    result.should.equal(5)
     done()

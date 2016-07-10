@@ -52,6 +52,24 @@ yify_example_with_arguments(2, 7, function(x) { console.log(x) }); // 15
 yify_example_with_arguments(2, 7).then(function(x) { console.log(x) }); // 15
 ```
 
+### Writing a wrapper for setTimeout (sleep)
+
+```javascript
+var sleep = cbify(function*(time) {
+  function sleep_base(msecs, callback) {
+    setTimeout(callback, msecs);
+  }
+  yield yify(sleep_base)(time);
+});
+
+var sleep_example = cbify(function*() {
+  yield sleep(3000); // sleeps for 3 seconds
+  return 7;
+});
+
+sleep_example(function(x) { console.log(x) }); // 7
+```
+
 ## API
 
 ### cbify
