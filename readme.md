@@ -1,5 +1,8 @@
 # cfy - CallbackiFY
 
+[![NPM version][npm-image]][npm-url]
+[![Build status][travis-image]][travis-url]
+
 Simplifies interop between [co](https://www.npmjs.com/package/co) (promise / generator-based) async functions, and async callback-based functions (both node-style nodebacks where the first parameter is an error, and regular callbacks).
 
 ## Features
@@ -191,6 +194,15 @@ ycall_node_example_with_arguments(2, 7, function(err, x) { console.log(x) }); //
 
 You will find more examples in [`example.js`](https://github.com/gkovacs/ycall/blob/master/example.js) (for interop with normal callback-based async functions) and [`example_node.js`](https://github.com/gkovacs/ycall/blob/master/example_node.js) (for interop with node-style nodeback-based async functions). The unit tests include examples of usage from Livescript.
 
+## License
+
+MIT
+
 ## Credits
 
 By [Geza Kovacs](https://github.com/gkovacs)
+
+[npm-image]: https://img.shields.io/npm/v/cfy.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/cfy
+[travis-image]: https://img.shields.io/travis/gkovacs/cfy.svg?style=flat-square
+[travis-url]: https://travis-ci.org/gkovacs/cfy
