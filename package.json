@@ -1,6 +1,6 @@
 {
   "name": "ycall",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Use generators and yield to write regular callback-based functions",
   "main": "index.js",
   "keywords": [
@@ -10,21 +10,24 @@
     "async",
     "callback",
     "promise",
-    "nodeback"
+    "nodeback",
+    "cfy",
+    "yfy",
+    "ycall"
   ],
   "scripts": {
     "test": "mocha --compilers ls:livescript"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gkovacs/ycall.git"
+    "url": "git+https://github.com/gkovacs/cfy.git"
   },
   "author": "Geza Kovacs (http://github.com/gkovacs)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gkovacs/ycall/issues"
+    "url": "https://github.com/gkovacs/cfy/issues"
   },
-  "homepage": "https://github.com/gkovacs/ycall#readme",
+  "homepage": "https://github.com/gkovacs/cfy#readme",
   "dependencies": {
     "co": "^4.6.0",
     "denodeify": "^1.2.1",

@@ -1,4 +1,4 @@
-# ycall
+# cfy - CallbackiFY
 
 Simplifies interop between [co](https://www.npmjs.com/package/co) (promise / generator-based) async functions, and async callback-based functions (both node-style nodebacks where the first parameter is an error, and regular callbacks).
 
@@ -11,7 +11,7 @@ Simplifies interop between [co](https://www.npmjs.com/package/co) (promise / gen
 ## Install
 
 ```
-npm install ycall
+npm install cfy
 ```
 
 ## Usage
@@ -19,7 +19,7 @@ npm install ycall
 For the purpose of these examples, we assume you have required the library as follows:
 
 ```javascript
-var {cfy, cfy_node, ycall, ycall_node, yfy, yfy_node} = require('ycall');
+var {cfy, cfy_node, ycall, ycall_node, yfy, yfy_node} = require('cfy');
 ```
 
 ## Examples
@@ -27,7 +27,7 @@ var {cfy, cfy_node, ycall, ycall_node, yfy, yfy_node} = require('ycall');
 ### Turning a generator into a callback/promise-based async function
 
 ```javascript
-var {cfy} = require('ycall');
+var {cfy} = require('cfy');
 
 var cfy_example = cfy(function*() {
   var result = yield Promise.resolve(5); // 5
@@ -41,7 +41,7 @@ cfy_example().then(function(x) { console.log(x) }); // 5
 ### Using callback-based async functions in generators
 
 ```javascript
-var {cfy, yfy} = require('ycall');
+var {cfy, yfy} = require('cfy');
 
 var yfy_example_with_arguments = cfy(function*(a, b) {
   var result = yield yfy(add_async)(5, 1); // 6
