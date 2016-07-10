@@ -192,7 +192,7 @@ ycall_node_example_with_arguments(2, 7, function(err, x) { console.log(x) }); //
 
 ## More Examples
 
-You will find more examples in [`example.js`](https://github.com/gkovacs/ycall/blob/master/example.js) (for interop with normal callback-based async functions) and [`example_node.js`](https://github.com/gkovacs/ycall/blob/master/example_node.js) (for interop with node-style nodeback-based async functions). The unit tests include examples of usage from Livescript.
+You will find more examples in [`example.js`](https://github.com/gkovacs/cfy/blob/master/examples/example.js) (for interop with normal callback-based async functions) and [`example_node.js`](https://github.com/gkovacs/cfy/blob/master/examples/example_node.js) (for interop with node-style nodeback-based async functions). The unit tests include examples of usage from Livescript.
 
 ## License
 
