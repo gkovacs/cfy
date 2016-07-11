@@ -170,10 +170,10 @@ yfy_multi_example(2).then(function(x) {console.log(x)}); // [3, 4]
 
 ```javascript
 var yfy_multi_node_example = yfy_multi_node(function(x, callback) {
-  callback(x + 1, x + 2);
+  callback(null, x + 1, x + 2);
 })
 
-yfy_multi_node_example(2).then(function(err, x) {console.log(x)}); // [3, 4]
+yfy_multi_node_example(2).then(function(x) {console.log(x)}); // [3, 4]
 ```
 
 ## More Examples

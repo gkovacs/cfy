@@ -1,6 +1,6 @@
 {
   "name": "cfy",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Use generators and yield to write regular callback-based functions",
   "main": "index.js",
   "keywords": [
