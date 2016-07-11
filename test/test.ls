@@ -15,6 +15,10 @@ require! {
 {expect} = chai
 chai.should()
 
+
+process.on 'unhandledRejection', (reason, p) ->
+  throw new Error(reason)
+
 add_async = (x, y, callback) ->
   setTimeout ->
     callback(x + y)
@@ -315,6 +319,71 @@ describe 'all tests', ->
     3.should.equal(g)
     5.should.equal(h)
     done()
+
+  /*
+  specify 'cfy throw errors callback', (done) ->
+    f = cfy ->*
+      throw new Error 'an error'
+    g = cfy ->*
+      yield f()
+    <- g()
+    done()
+
+  specify 'cfy throw errors promise', (done) ->
+    f = cfy ->*
+      throw new Error 'an error'
+    g = cfy ->*
+      yield f()
+    <- g().then
+    done()
+  */
+
+  /*
+  specify 'yfy throw errors callback simple', (done) ->
+    f = yfy (callback) ->
+      callback(throw new Error 'an error')
+    <- f()
+    done()
+
+  specify 'yfy throw errors callback', (done) ->
+    f = yfy (callback) ->
+      callback(throw new Error 'an error')
+    g = cfy ->*
+      yield f()
+    <- g()
+    done()
+
+  specify 'yfy throw errors promise', (done) ->
+    f = yfy (callback) ->
+      callback(throw new Error 'an error')
+    g = cfy ->*
+      yield f()
+    <- g().then
+    done()
+
+  specify 'cfy throw errors callback simple', (done) ->
+    f = cfy ->*
+      throw new Error 'an error'
+    <- f()
+    done()
+
+  specify 'cfy throw errors callback', (done) ->
+    f = cfy ->*
+      throw new Error 'an error'
+    g = cfy ->*
+      yield f()
+    <- g()
+    done()
+
+  specify 'cfy throw errors promise', (done) ->
+    f = cfy ->*
+      throw new Error 'an error'
+    g = cfy ->*
+      yield f()
+    <- g().then
+    done()
+  */
+
 
   #specify 'yfy_multi test with callback', (done) ->
   #  f = yfy_multi (x, callback) ->

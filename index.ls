@@ -51,7 +51,7 @@ export cfy = (f) ->
   return (...args, callback) ->
     if args.length == num_args and typeof(callback) == 'function'
       # the callback was passed, call the function immediately
-      return wrapped.bind(this)(...args).then(callback, (err) -> console.log(err))
+      return wrapped.bind(this)(...args).then(callback)
     else
       # return a promise
       return wrapped.bind(this)(...args, callback)

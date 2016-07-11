@@ -123,9 +123,7 @@
       }
       args = res$; callback = arguments[i$];
       if (args.length === num_args && typeof callback === 'function') {
-        return wrapped.bind(this).apply(null, args).then(callback, function(err){
-          return console.log(err);
-        });
+        return wrapped.bind(this).apply(null, args).then(callback);
       } else {
         return wrapped.bind(this).apply(null, slice$.call(args).concat([callback]));
       }
