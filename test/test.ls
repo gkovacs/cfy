@@ -1,12 +1,10 @@
 {
   yfy
   cfy
-  ycall
   yfy_node
   cfy_node
-  ycall_node
-  sleep
-  sleep_node
+  yfy_multi
+  yfy_multi_node
 } = require('../index')
 
 require! {
@@ -14,6 +12,7 @@ require! {
   chai
 }
 
+{expect} = chai
 chai.should()
 
 add_async = (x, y, callback) ->
@@ -70,20 +69,6 @@ describe 'all tests', ->
     result.should.equal(6)
     done()
 
-  specify 'ycall test', (done) ->
-    f = cfy ->*
-      yield ycall(add_async, 5, 1)
-    result <- f()
-    result.should.equal(6)
-    done()
-
-  specify 'ycall_node test', (done) ->
-    f = cfy ->*
-      yield ycall_node(add_async_node, 5, 1)
-    result <- f()
-    result.should.equal(6)
-    done()
-
   specify 'cfy multiple arguments test', (done) ->
     f = cfy (x, y) ->*
       return 2 + 5
@@ -93,7 +78,7 @@ describe 'all tests', ->
 
   specify 'cfy multiple arguments nontrivial test', (done) ->
     f = cfy (x, y) ->*
-      tmp = yield ycall(add_async, 3, 1)
+      tmp = yield yfy(add_async) 3, 1
       return tmp + x + y
     result <- f(2, 5)
     result.should.equal(11)
@@ -101,7 +86,7 @@ describe 'all tests', ->
 
   specify 'cfy multiple arguments nontrivial promise test', (done) ->
     f = cfy (x, y) ->*
-      tmp = yield ycall(add_async, 3, 1)
+      tmp = yield yfy(add_async) 3, 1
       return tmp + x + y
     result <- f(2, 5).then()
     result.should.equal(11)
@@ -187,7 +172,6 @@ describe 'all tests', ->
     3.should.equal(res2)
     done()
 
-
   specify 'retain this with cfy_node', (done) ->
     this.x = 3
     f = cfy_node ->*
@@ -197,3 +181,141 @@ describe 'all tests', ->
     3.should.not.equal(res1)
     3.should.equal(res2)
     done()
+
+  specify 'cfy handle functions that yield callbacks correctly callback', (done) ->
+    get5 = -> 5
+    f = cfy ->*
+      return get5
+    g <- f()
+    5.should.equal(g())
+    done()
+
+  specify 'cfy handle functions that yield callbacks correctly promise', (done) ->
+    get5 = -> 5
+    f = cfy ->*
+      return get5
+    g <- f().then
+    5.should.equal(g())
+    done()
+
+  specify 'cfy handle functions that have callbacks as arguments correctly callback', (done) ->
+    get5 = -> 5
+    f = cfy (f1) ->*
+      return f1() + f1()
+    g <- f(get5)
+    10.should.equal(g)
+    done()
+
+  specify 'cfy handle functions that have callbacks as arguments correctly promise', (done) ->
+    get5 = -> 5
+    f = cfy (f1) ->*
+      return f1() + f1()
+    g <- f(get5).then
+    10.should.equal(g)
+    done()
+
+  specify 'yfy test with multi arg promise', (done) ->
+    f = yfy (callback) ->
+      callback 3, 5
+    g <- f().then
+    3.should.equal(g)
+    done()
+
+  specify 'yfy test with multi arg callback', (done) ->
+    f = yfy (callback) ->
+      callback 3, 5
+    g <- f()
+    3.should.equal(g)
+    done()
+
+  specify 'yfy_node test with multi arg promise', (done) ->
+    f = yfy_node (callback) ->
+      callback null, 3, 5
+    g <- f().then
+    3.should.equal(g)
+    done()
+
+  specify 'yfy_node test with multi arg callback', (done) ->
+    f = yfy_node (callback) ->
+      callback null, 3, 5
+    err,g <- f()
+    expect(err).to.be.null
+    3.should.equal(g)
+    done()
+
+  specify 'yfy test with multi arg callback', (done) ->
+    f = yfy (callback) ->
+      callback 3, 5
+    g <- f()
+    3.should.equal(g)
+    done()
+
+  specify 'yfy_multi test with single arg promise', (done) ->
+    f = yfy_multi (callback) ->
+      callback 3
+    g <- f().then
+    1.should.equal(g.length)
+    3.should.equal(g[0])
+    done()
+
+  specify 'yfy_multi test with single arg callback', (done) ->
+    f = yfy_multi (callback) ->
+      callback 3
+    g <- f()
+    3.should.equal(g)
+    done()
+
+  specify 'yfy_multi_node test with single arg promise', (done) ->
+    f = yfy_multi_node (callback) ->
+      callback null, 3
+    g <- f().then
+    1.should.equal(g.length)
+    3.should.equal(g[0])
+    done()
+
+  specify 'yfy_multi_node test with single arg callback', (done) ->
+    f = yfy_multi_node (callback) ->
+      callback null, 3
+    err,g <- f()
+    expect(err).to.be.null
+    3.should.equal(g)
+    done()
+
+  specify 'yfy_multi test with multi arg promise', (done) ->
+    f = yfy_multi (callback) ->
+      callback 3, 5
+    g <- f().then
+    2.should.equal(g.length)
+    3.should.equal(g[0])
+    5.should.equal(g[1])
+    done()
+
+  specify 'yfy_multi test with multi arg callback', (done) ->
+    f = yfy_multi (callback) ->
+      callback 3, 5
+    g,h <- f()
+    3.should.equal(g)
+    5.should.equal(h)
+    done()
+
+  specify 'yfy_multi_node test with multi arg promise', (done) ->
+    f = yfy_multi_node (callback) ->
+      callback null, 3, 5
+    g <- f().then
+    2.should.equal(g.length)
+    3.should.equal(g[0])
+    5.should.equal(g[1])
+    done()
+
+  specify 'yfy_multi_node test with multi arg callback', (done) ->
+    f = yfy_multi_node (callback) ->
+      callback null, 3, 5
+    err,g,h <- f()
+    expect(err).to.be.null
+    3.should.equal(g)
+    5.should.equal(h)
+    done()
+
+  #specify 'yfy_multi test with callback', (done) ->
+  #  f = yfy_multi (x, callback) ->
+  #    callback x + 1, x + 2

@@ -22,7 +22,7 @@ npm install cfy
 For the purpose of these examples, we assume you have required the library as follows:
 
 ```javascript
-var {cfy, cfy_node, ycall, ycall_node, yfy, yfy_node} = require('cfy');
+var {cfy, cfy_node, yfy, yfy_node} = require('cfy');
 ```
 
 ## Examples
@@ -116,7 +116,7 @@ cfy_node_example().then(function(x) { console.log(x) });
 
 ### yfy
 
-`yfy` transforms a callback-style function into a promise which can be yielded within a generator.
+`yfy` transforms a callback-style function into a promise which can be yielded within a generator. If the callback has multiple results, only the first one will be output. (Use `yfy_multi` if you need all the results).
 
 ```javascript
 function add_async(x, y, callback) {
@@ -135,7 +135,7 @@ yfy_example_with_arguments(2, 7, function(x) { console.log(x) }); // 15
 
 ### yfy_node
 
-`yfy_node` transforms a nodeback-style function into a promise which can be yielded within a generator.
+`yfy_node` transforms a nodeback-style function into a promise which can be yielded within a generator. If the callback has multiple results, only the first one will be output (the error parameter will not be included). (Use `yfy_multi_node` if you need all the results).
 
 ```javascript
 function add_async_node(x, y, nodeback) {
@@ -152,47 +152,37 @@ var yfy_node_example_with_arguments = cfy_node(function*(a, b) {
 yfy_node_example_with_arguments(2, 7, function(err, x) { console.log(x) }); // 15
 ```
 
-### ycall
+### yfy_multi
 
-`ycall` is a shorthand that calls `yfy` on a callback-based function and calls it with the remaining parameters. So `ycall(func, x, y)` is equivalent to `yfy(func)(x, y)`
+`yfy_multi` transforms a callback-style function into a promise which can be yielded within a generator. The promise will resolve to an array containing all the arguments to the callback function.
 
 ```javascript
-function add_async(x, y, callback) {
-  setTimeout(function() {
-    callback(x + y);
-  }, 1000);
-}
+var yfy_multi_example = yfy_multi(function(x, callback) {
+  callback(x + 1, x + 2);
+})
 
-var ycall_example_with_arguments = cfy(function*(a, b) {
-  var result = yield ycall(add_async, 5, 1); // 6
-  return result + a + b;
-});
-
-ycall_example_with_arguments(2, 7, function(x) { console.log(x) }); // 15
+yfy_multi_example(2).then(function(x) {console.log(x)}); // [3, 4]
 ```
 
-### ycall_node
+### yfy_multi_node
 
-`ycall_node` is a shorthand that calls `yfy_node` on a nodeback-based function and calls it with the remaining parameters. So `ycall_node(func, x, y)` is equivalent to `yfy_node(func)(x, y)`
+`yfy_multi_node` transforms a nodeback-style function into a promise which can be yielded within a generator. The promise will resolve to an array containing all the arguments to the callback function, except the first one (error parameter).
 
 ```javascript
-function add_async_node(x, y, nodeback) {
-  setTimeout(function() {
-    nodeback(null, x + 1);
-  }, 1000);
-}
+var yfy_multi_node_example = yfy_multi_node(function(x, callback) {
+  callback(x + 1, x + 2);
+})
 
-var ycall_node_example_with_arguments = cfy_node(function*(a, b) {
-  var result = yield ycall_node(add_async_node, 5, 1); // 6
-  return result + a + b;
-});
-
-ycall_node_example_with_arguments(2, 7, function(err, x) { console.log(x) }); // 15
+yfy_multi_node_example(2).then(function(err, x) {console.log(x)}); // [3, 4]
 ```
 
 ## More Examples
 
 You will find more examples in [`example.js`](https://github.com/gkovacs/cfy/blob/master/examples/example.js) (for interop with normal callback-based async functions) and [`example_node.js`](https://github.com/gkovacs/cfy/blob/master/examples/example_node.js) (for interop with node-style nodeback-based async functions). The unit tests include examples of usage from Livescript.
+
+## Limitations
+
+Note that `cfy` will return a promise if you are using it with functions that take variable numbers of arguments. This is because it is not possible to distinguish whether the last argument is intended to be used as a callback or another argument.
 
 ## License
 

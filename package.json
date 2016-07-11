@@ -1,6 +1,6 @@
 {
   "name": "cfy",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Use generators and yield to write regular callback-based functions",
   "main": "index.js",
   "keywords": [
@@ -12,8 +12,7 @@
     "promise",
     "nodeback",
     "cfy",
-    "yfy",
-    "ycall"
+    "yfy"
   ],
   "scripts": {
     "test": "mocha --compilers ls:livescript"
@@ -30,7 +29,6 @@
   "homepage": "https://github.com/gkovacs/cfy#readme",
   "dependencies": {
     "co": "^4.6.0",
-    "denodeify": "^1.2.1",
     "unthenify": "^1.0.2"
   },
   "devDependencies": {

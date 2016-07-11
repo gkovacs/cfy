@@ -1,42 +1,69 @@
 require! {
   co
-  denodeify
   unthenify
 }
 
 export yfy = (f) ->
-  denodeify f, (...res) ->
-    if res.length == 1
-      return [null, res[0]]
-    else
-      return [null, [...res]]
+  return (...functionArguments) ->
+    self = this
+    return new Promise (resolve, reject) ->
+      callbackFunction = (...args) ->
+        return resolve(args[0])
+      functionArguments.push(callbackFunction)
+      f.apply(self, functionArguments)
 
 export yfy_node = (f) ->
-  denodeify f, (err, ...res) ->
-    if res.length == 1
-      return [err, res[0]]
-    else
-      return [err, [...res]]
+  return (...functionArguments) ->
+    self = this
+    return new Promise (resolve, reject) ->
+      callbackFunction = (...args) ->
+        err = args[0]
+        if err
+          return reject(err)
+        return resolve(args[1])
+      functionArguments.push(callbackFunction)
+      f.apply(self, functionArguments)
+
+export yfy_multi = (f) ->
+  return (...functionArguments) ->
+    self = this
+    return new Promise (resolve, reject) ->
+      callbackFunction = (...args) ->
+        return resolve(args)
+      functionArguments.push(callbackFunction)
+      f.apply(self, functionArguments)
+
+export yfy_multi_node = (f) ->
+  return (...functionArguments) ->
+    self = this
+    return new Promise (resolve, reject) ->
+      callbackFunction = (...args) ->
+        err = args[0]
+        if err
+          return reject(err)
+        return resolve(args.slice(1))
+      functionArguments.push(callbackFunction)
+      f.apply(self, functionArguments)
 
 export cfy = (f) ->
+  num_args = f.length
   wrapped = co.wrap(f)
   return (...args, callback) ->
-    if typeof(callback) == 'function'
+    if args.length == num_args and typeof(callback) == 'function'
+      # the callback was passed, call the function immediately
       return wrapped.bind(this)(...args).then(callback, (err) -> console.log(err))
     else
+      # return a promise
       return wrapped.bind(this)(...args, callback)
 
 export cfy_node = (f) ->
+  num_args = f.length
   wrapped = co.wrap(f)
   wrapped_cb = unthenify(wrapped)
   return (...args, callback) ->
-    if typeof(callback) == 'function'
+    if args.length == num_args and typeof(callback) == 'function'
+      # the callback was passed, call the function immediately
       return wrapped_cb.bind(this)(...args, callback)
     else
+      # return a promise
       return wrapped.bind(this)(...args, callback)
-
-export ycall = (f, ...args) ->
-  yfy(f)(...args)
-
-export ycall_node = (f, ...args) ->
-  yfy_node(f)(...args)

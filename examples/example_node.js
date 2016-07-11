@@ -1,9 +1,8 @@
 var {
   yfy_node,
   cfy_node,
-  ycall_node,
   cfy,
-} = require('./index'); // require('ycall')
+} = require('../index'); // require('cfy')
 
 var cfy_node_example = cfy_node(function*() {
   var result = yield Promise.resolve(5); // 5
@@ -19,13 +18,6 @@ function add_async_node(x, y, nodeback) {
     nodeback(null, x + 1);
   }, 1000);
 }
-
-var ycall_node_example = cfy_node(function*() {
-  var result = yield ycall_node(add_async_node, 5, 1); // 6
-  return result;
-});
-
-ycall_node_example(function(err, x) { console.log(x) }); // 6
 
 var yfy_node_example = cfy_node(function*() {
   var result = yield yfy_node(add_async_node)(5, 1); // 6
@@ -47,11 +39,3 @@ var yfy_node_example_with_arguments = cfy_node(function*(a, b) {
 });
 
 yfy_node_example_with_arguments(2, 7, function(err, x) { console.log(x) }); // 15
-
-var ycall_node_example_with_arguments = cfy_node(function*(a, b) {
-  var result = yield ycall_node(add_async_node, 5, 1); // 6
-  return result + a + b;
-});
-
-ycall_node_example_with_arguments(2, 7, function(err, x) { console.log(x) }); // 15
-
