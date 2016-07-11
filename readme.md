@@ -46,6 +46,12 @@ cfy_example().then(function(x) { console.log(x) }); // 5
 ```javascript
 var {cfy, yfy} = require('cfy');
 
+function add_async(x, y, callback) {
+  setTimeout(function() {
+    callback(x + y);
+  }, 1000);
+}
+
 var yfy_example_with_arguments = cfy(function*(a, b) {
   var result = yield yfy(add_async)(5, 1); // 6
   return result + a + b;
