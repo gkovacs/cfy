@@ -111,9 +111,13 @@
       });
     };
   };
-  out$.cfy = cfy = function(f){
+  out$.cfy = cfy = function(f, options){
     var num_args, wrapped;
-    num_args = f.length;
+    if (options != null && options.num_args != null) {
+      num_args = options.num_args;
+    } else {
+      num_args = f.length;
+    }
     wrapped = co.wrap(f);
     return function(){
       var i$, args, res$, j$, callback;
@@ -129,9 +133,13 @@
       }
     };
   };
-  out$.cfy_node = cfy_node = function(f){
+  out$.cfy_node = cfy_node = function(f, options){
     var num_args, wrapped, wrapped_cb;
-    num_args = f.length;
+    if (options != null && options.num_args != null) {
+      num_args = options.num_args;
+    } else {
+      num_args = f.length;
+    }
     wrapped = co.wrap(f);
     wrapped_cb = unthenify(wrapped);
     return function(){

@@ -320,6 +320,39 @@ describe 'all tests', ->
     5.should.equal(h)
     done()
 
+  specify 'cfy specify number of arguments for variable arguments function callback', (done) ->
+    f = (...args) ->* args[0] + args[1]
+    0.should.equal(f.length)
+    g = cfy f, {num_args: 2}
+    res <- g(3, 5)
+    8.should.equal(res)
+    done()
+
+  specify 'cfy specify number of arguments for variable arguments function promise', (done) ->
+    f = (...args) ->* args[0] + args[1]
+    0.should.equal(f.length)
+    g = cfy f, {num_args: 2}
+    res <- g(3, 5).then
+    8.should.equal(res)
+    done()
+
+  specify 'cfy_node specify number of arguments for variable arguments function callback', (done) ->
+    f = (...args) ->* args[0] + args[1]
+    0.should.equal(f.length)
+    g = cfy_node f, {num_args: 2}
+    err,res <- g(3, 5)
+    expect(err).to.be.null
+    8.should.equal(res)
+    done()
+
+  specify 'cfy_node specify number of arguments for variable arguments function promise', (done) ->
+    f = (...args) ->* args[0] + args[1]
+    0.should.equal(f.length)
+    g = cfy_node f, {num_args: 2}
+    res <- g(3, 5).then
+    8.should.equal(res)
+    done()
+
   /*
   specify 'cfy throw errors callback', (done) ->
     f = cfy ->*

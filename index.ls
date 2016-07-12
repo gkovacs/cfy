@@ -45,8 +45,11 @@ export yfy_multi_node = (f) ->
       functionArguments.push(callbackFunction)
       f.apply(self, functionArguments)
 
-export cfy = (f) ->
-  num_args = f.length
+export cfy = (f, options) ->
+  if options? and options.num_args?
+    num_args = options.num_args
+  else
+    num_args = f.length
   wrapped = co.wrap(f)
   return (...args, callback) ->
     if args.length == num_args and typeof(callback) == 'function'
@@ -56,8 +59,11 @@ export cfy = (f) ->
       # return a promise
       return wrapped.bind(this)(...args, callback)
 
-export cfy_node = (f) ->
-  num_args = f.length
+export cfy_node = (f, options) ->
+  if options? and options.num_args?
+    num_args = options.num_args
+  else
+    num_args = f.length
   wrapped = co.wrap(f)
   wrapped_cb = unthenify(wrapped)
   return (...args, callback) ->
