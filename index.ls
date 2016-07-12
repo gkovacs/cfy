@@ -46,10 +46,12 @@ export yfy_multi_node = (f) ->
       f.apply(self, functionArguments)
 
 export cfy = (f, options) ->
-  if options? and options.num_args?
-    num_args = options.num_args
-  else
-    num_args = f.length
+  num_args = f.length
+  if options?
+    if options.varargs?
+      return cfy_varargs(f)
+    if options.num_args?
+      num_args = options.num_args
   wrapped = co.wrap(f)
   return (...args, callback) ->
     if args.length == num_args and typeof(callback) == 'function'
@@ -59,15 +61,38 @@ export cfy = (f, options) ->
       # return a promise
       return wrapped.bind(this)(...args, callback)
 
+cfy_varargs = (f) ->
+  wrapped = co.wrap(f)
+  return (...args, callback) ->
+    if typeof(callback) == 'function'
+      # the callback was passed, call the function immediately
+      return wrapped.bind(this)(...args).then(callback)
+    else
+      # return a promise
+      return wrapped.bind(this)(...args, callback)
+
 export cfy_node = (f, options) ->
-  if options? and options.num_args?
-    num_args = options.num_args
-  else
-    num_args = f.length
+  num_args = f.length
+  if options?
+    if options.varargs?
+      return cfy_varargs_node(f)
+    if options.num_args?
+      num_args = options.num_args
   wrapped = co.wrap(f)
   wrapped_cb = unthenify(wrapped)
   return (...args, callback) ->
     if args.length == num_args and typeof(callback) == 'function'
+      # the callback was passed, call the function immediately
+      return wrapped_cb.bind(this)(...args, callback)
+    else
+      # return a promise
+      return wrapped.bind(this)(...args, callback)
+
+cfy_varargs_node = (f) ->
+  wrapped = co.wrap(f)
+  wrapped_cb = unthenify(wrapped)
+  return (...args, callback) ->
+    if typeof(callback) == 'function'
       # the callback was passed, call the function immediately
       return wrapped_cb.bind(this)(...args, callback)
     else

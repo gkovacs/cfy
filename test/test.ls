@@ -353,6 +353,40 @@ describe 'all tests', ->
     8.should.equal(res)
     done()
 
+  specify 'cfy varargs option callback', (done) ->
+    f = (...args) ->* args.reduce (+), 0
+    0.should.equal(f.length)
+    g = cfy f, {varargs: true}
+    res <- g(3, 5, 7)
+    15.should.equal(res)
+    done()
+
+  specify 'cfy varargs option promise', (done) ->
+    f = (...args) ->* args.reduce (+), 0
+    0.should.equal(f.length)
+    g = cfy f, {varargs: true}
+    res <- g(3, 5, 7).then
+    15.should.equal(res)
+    done()
+
+  specify 'cfy_node varargs option callback', (done) ->
+    f = (...args) ->* args.reduce (+), 0
+    0.should.equal(f.length)
+    g = cfy_node f, {varargs: true}
+    err,res <- g(3, 5, 7)
+    expect(err).to.be.null
+    15.should.equal(res)
+    done()
+
+  specify 'cfy_node varargs option promise', (done) ->
+    f = (...args) ->* args.reduce (+), 0
+    0.should.equal(f.length)
+    g = cfy_node f, {varargs: true}
+    res <- g(3, 5, 7).then
+    15.should.equal(res)
+    done()
+
+
   /*
   specify 'cfy throw errors callback', (done) ->
     f = cfy ->*

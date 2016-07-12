@@ -186,9 +186,17 @@ yfy_multi_node_example(2).then(function(x) {console.log(x)}); // [3, 4]
 
 You will find more examples in [`example.js`](https://github.com/gkovacs/cfy/blob/master/examples/example.js) (for interop with normal callback-based async functions) and [`example_node.js`](https://github.com/gkovacs/cfy/blob/master/examples/example_node.js) (for interop with node-style nodeback-based async functions). The unit tests include examples of usage from Livescript.
 
-## Limitations
+## Notes
 
-Note that `cfy` will return a promise if you are using it with functions that take variable numbers of arguments. This is because it is not possible to distinguish whether the last argument is intended to be used as a callback or another argument.
+### cfy with generator functions that take variable numbers of parameters
+
+Note that `cfy` will always return a promise-style function if you are using it with generator functions that take variable numbers of arguments. This is because it is not possible to distinguish whether the last argument is intended to be used as a callback or another argument.
+
+If you wish to use `cfy` to get a callback-style function from a generator function that takes variable numbers of arguments, or a generator function that does not have the `.length` property correctly set, you can use `cfy(your_function, {varargs: true})`. If you are using the `varargs` option, ensure that your generator function's last parameter is never a function, otherwise it will be mistakenly assumed to be a callback.
+
+### yfy with functions that take variable numbers of parameters
+
+Note that `yfy` will always return a promise-style function if you are using it with functions that take variable numbers of arguments. This is because it is not possible to distinguish whether the last argument is intended to be used as a callback or another argument.
 
 ## License
 
