@@ -188,6 +188,24 @@ You will find more examples in [`example.js`](https://github.com/gkovacs/cfy/blo
 
 ## Notes
 
+### Unhandled promise rejections
+
+You sure ensure that unhandled promise rejections get printed or thrown, otherwise uncaught errors that occur in code that returns promises (ie, the body of `cfy` and `yfy` functions) will be silent (will not be printed). In nodejs, you can throw an Error when there is an unhandled rejection by adding to the top of your file:
+
+```javascript
+process.on('unhandledRejection', function(reason, p) {
+  throw new Error(reason);
+});
+```
+
+In the browser, you can throw an Error when there is an unhandled rejection by adding to the top of your file:
+
+```javascript
+window.addEventListener('unhandledrejection', function(evt) {
+  throw evt.reason;
+});
+```
+
 ### cfy with generator functions that take variable numbers of parameters
 
 Note that `cfy` will always return a promise-style function if you are using it with generator functions that take variable numbers of arguments. This is because it is not possible to distinguish whether the last argument is intended to be used as a callback or another argument.
