@@ -3,6 +3,11 @@ require! {
   unthenify
 }
 
+export add_noerr = (callback) ->
+  return (cb) ->
+    callback (res) ->
+      cb(null, res)
+
 export yfy = (f) ->
   return (...functionArguments) ->
     self = this

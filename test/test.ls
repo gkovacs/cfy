@@ -5,6 +5,7 @@
   cfy_node
   yfy_multi
   yfy_multi_node
+  add_noerr
 } = require('../index')
 
 require! {
@@ -386,6 +387,28 @@ describe 'all tests', ->
     15.should.equal(res)
     done()
 
+  specify 'add_null_err test', (done) ->
+    f = -> it(3)
+    g <- f()
+    3.should.equal(g)
+    err,h <- add_noerr(f)()
+    expect(err).to.be.null
+    3.should.equal(h)
+    done()
+
+  specify 'yield thunk test', (done) ->
+    g = cfy ->*
+      return yield (cb) -> cb(null, 3)
+    res <- g()
+    3.should.equal(res)
+    done()
+
+  specify 'yield thunk test add_noerr', (done) ->
+    g = cfy ->*
+      return yield add_noerr -> it(3)
+    res <- g()
+    3.should.equal(res)
+    done()
 
   /*
   specify 'cfy throw errors callback', (done) ->
