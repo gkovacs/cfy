@@ -103,3 +103,10 @@ cfy_varargs_node = (f) ->
     else
       # return a promise
       return wrapped.bind(this)(...args, callback)
+
+make_callable = (obj, func) ->
+  obj.__proto__ = func.__proto__
+  func.__proto__ = obj
+  return func
+
+module.exports = make_callable(module.exports, cfy)
